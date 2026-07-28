@@ -1,0 +1,4 @@
+interface:
+  display_name: "Discord Webhooks"
+  short_description: "Send and manage Discord webhook destinations"
+  default_prompt: "Use $discord-webhooks to send a Discord webhook message."
