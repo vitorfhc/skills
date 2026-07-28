@@ -8,8 +8,10 @@ Reusable, standalone agent skills published by Vitor Falcão.
 destinations in `~/.discord-webhooks/config.yaml`.
 
 It supports text, embeds, polls, TTS, attachments, forum and thread messages, username and avatar
-overrides, safe mentions, and notification flags. It intentionally excludes interactive
-components and message editing or deletion.
+overrides, safe mentions, notification flags, and non-interactive Components V2 layouts. It
+intentionally excludes interactive components and message editing or deletion. A bundled sender
+validates payloads and destinations, keeps webhook URLs out of curl process arguments, handles
+Discord rate limits, and avoids automatic retries when delivery could be ambiguous.
 
 Install it with [`npx skills`](https://github.com/vercel-labs/skills):
 
@@ -46,6 +48,17 @@ alerts: "https://discord.com/api/webhooks/..."
 ```
 
 Webhook URLs contain secret tokens. Do not commit, print, or share the config.
+
+## Development
+
+Run the deterministic test suite with:
+
+```bash
+python3 -m unittest discover -s tests -v
+```
+
+The tests use a curl stand-in plus a local HTTPS fixture for real multipart `curl` coverage. They do
+not contact Discord or send live messages.
 
 ## Sources
 

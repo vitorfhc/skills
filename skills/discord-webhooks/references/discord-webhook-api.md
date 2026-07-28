@@ -10,6 +10,7 @@ This reference incorporates the payload anatomy and examples from the
 Discord's current official documentation is authoritative when it differs:
 
 - [Webhook resource and Execute Webhook](https://docs.discord.com/developers/resources/webhook#execute-webhook)
+- [Component reference](https://docs.discord.com/developers/components/reference)
 - [Message embeds and allowed mentions](https://docs.discord.com/developers/resources/message)
 - [Poll request objects](https://docs.discord.com/developers/resources/poll#poll-create-request-object)
 - [Uploading files](https://docs.discord.com/developers/reference#uploading-files)
@@ -32,12 +33,14 @@ Supported query parameters:
 | --- | --- |
 | `wait=true` | Wait for confirmation and return the created message. |
 | `thread_id=<snowflake>` | Send to an existing thread and unarchive it if necessary. |
+| `with_components=true` | Respect non-interactive components sent by an incoming webhook. |
 
-Do not set `with_components`; this skill intentionally excludes components.
+Set `with_components=true` only when sending the supported non-interactive Components V2 payloads
+described below.
 
 ## JSON and form fields
 
-At least one of `content`, `embeds`, `poll`, or `files[n]` is required.
+At least one of `content`, `embeds`, `poll`, `components`, or `files[n]` is required.
 
 | Field | Purpose and constraints |
 | --- | --- |
@@ -47,10 +50,11 @@ At least one of `content`, `embeds`, `poll`, or `files[n]` is required.
 | `tts` | Send as text-to-speech when `true` and permitted. |
 | `embeds` | Up to 10 rich embed objects, with 6,000 total text characters across them. |
 | `allowed_mentions` | Control which textual mentions notify users. |
+| `components` | Non-interactive Components V2 display and layout objects. |
 | `files[n]` | Indexed multipart file parts such as `files[0]`. |
 | `payload_json` | JSON-encoded non-file fields in a multipart request. |
 | `attachments` | Metadata for uploaded files; IDs must match each `files[n]` index. |
-| `flags` | Use `4` to suppress embeds, `4096` to suppress notifications, or `4100` for both. |
+| `flags` | `4` suppresses embeds, `4096` suppresses notifications, and `32768` enables Components V2. |
 | `thread_name` | Create a thread in a forum or media channel. |
 | `applied_tags` | Tag IDs to apply with `thread_name` in a forum or media channel. |
 | `poll` | Create a poll with question, answers, duration, and selection behavior. |
@@ -110,12 +114,44 @@ Convert a hex color to its decimal integer before sending, for example `0x5865F2
 
 A poll request contains:
 
-- `question.poll_media.text`: question, up to 300 characters.
+- `question.text`: question, up to 300 characters.
 - `answers`: up to 10 entries, each with `poll_media.text` up to 55 characters and an optional
   emoji. Use `emoji.name` for built-in emoji or `emoji.id` for custom emoji.
 - `duration`: integer hours, default 24, maximum 768 (32 days).
 - `allow_multiselect`: boolean, default `false`.
 - `layout_type`: currently `1`.
+
+## Non-interactive components
+
+Incoming webhooks may send non-interactive Components V2 when the request includes
+`with_components=true` and the message has the `IS_COMPONENTS_V2` flag (`32768`). The bundled
+sender adds both automatically when a valid `components` array is present.
+
+Supported types:
+
+| Type | Name | Placement and key constraints |
+| --- | --- | --- |
+| `9` | Section | Top-level or inside a Container; one to three Text Display children and one Thumbnail accessory. |
+| `10` | Text Display | Top-level, inside a Section, or inside a Container; requires non-empty Markdown `content`. |
+| `11` | Thumbnail | Only as a Section accessory; requires an external HTTP(S) `media.url`. |
+| `12` | Media Gallery | Top-level or inside a Container; one to ten items with external HTTP(S) media URLs. |
+| `14` | Separator | Top-level or inside a Container; optional boolean `divider` and spacing `1` or `2`. |
+| `17` | Container | Top-level only; groups supported children and may set `accent_color` and `spoiler`. |
+
+The sender rejects Action Rows, Buttons, Selects, inputs, and every other interactive or modal
+component. It also rejects the File component (`13`) in this incoming-webhook flow: Discord's
+Execute Webhook documentation says an `IS_COMPONENTS_V2` webhook message cannot include
+`files[n]`, while a File component requires an uploaded `attachment://` reference. Send a normal
+attachment without `components` instead.
+
+Components V2 messages:
+
+- Cannot contain `content`, `embeds`, `poll`, `attachments`, or uploaded `files[n]`.
+- Can contain at most 40 component objects in total, including nested objects and accessories.
+- May assign optional unique unsigned 32-bit integer `id` values. Discord treats `0` as unset.
+- Still use `allowed_mentions`; Text Display mentions notify only when explicitly enabled.
+- May use only external HTTP(S) media in this skill because file uploads are incompatible with this
+  incoming-webhook request shape.
 
 ## Files
 
@@ -217,6 +253,42 @@ curl --proto '=https' \
     "allow_multiselect": false,
     "layout_type": 1
   }
+}
+JSON
+```
+
+### Non-interactive Components V2
+
+```bash
+curl --proto '=https' \
+  --silent --show-error --fail-with-body \
+  --connect-timeout 10 --max-time 30 \
+  --request POST \
+  --header 'Content-Type: application/json' \
+  --data-binary @- \
+  "${WEBHOOK_URL}?wait=true&with_components=true" <<'JSON'
+{
+  "flags": 32768,
+  "allowed_mentions": {"parse": []},
+  "components": [
+    {
+      "type": 17,
+      "accent_color": 5793266,
+      "components": [
+        {"type": 10, "content": "# Build passed\nProduction is ready."},
+        {"type": 14, "divider": true, "spacing": 1},
+        {
+          "type": 12,
+          "items": [
+            {
+              "media": {"url": "https://example.com/deployment.png"},
+              "description": "Deployment status"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
 JSON
 ```

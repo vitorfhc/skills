@@ -51,9 +51,13 @@ def validate_url(url: str) -> None:
     if parsed.scheme != "https" or not official_host:
         raise ConfigError("webhook URL must use HTTPS on an official Discord hostname")
     if parsed.username or parsed.password or port not in (None, 443):
-        raise ConfigError("webhook URL must not contain credentials or a non-HTTPS port")
+        raise ConfigError(
+            "webhook URL must not contain credentials or a non-HTTPS port"
+        )
     if parsed.query or parsed.fragment:
-        raise ConfigError("store the base webhook URL without query parameters or fragments")
+        raise ConfigError(
+            "store the base webhook URL without query parameters or fragments"
+        )
     if not WEBHOOK_PATH_PATTERN.fullmatch(parsed.path):
         raise ConfigError("URL is not a standard Discord incoming-webhook URL")
 
@@ -67,9 +71,7 @@ def ensure_config(path: Path) -> None:
 
         if not path.exists():
             try:
-                descriptor = os.open(
-                    path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600
-                )
+                descriptor = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
             except FileExistsError:
                 pass
             else:
@@ -114,7 +116,7 @@ def load_config(path: Path) -> dict[str, str]:
         match = ENTRY_PATTERN.fullmatch(stripped)
         if not match:
             raise ConfigError(
-                f"line {line_number}: expected alias: \"https://discord.com/api/webhooks/...\""
+                f'line {line_number}: expected alias: "https://discord.com/api/webhooks/..."'
             )
 
         alias, raw_value = match.groups()
@@ -162,7 +164,9 @@ def write_config(path: Path, aliases: dict[str, str]) -> None:
 
 def read_url_argument(url: str | None, read_stdin: bool) -> str:
     if read_stdin and url is not None:
-        raise ConfigError("provide the URL either as an argument or through --stdin, not both")
+        raise ConfigError(
+            "provide the URL either as an argument or through --stdin, not both"
+        )
     if read_stdin:
         value = sys.stdin.readline().rstrip("\r\n")
     elif url is not None:
@@ -191,7 +195,9 @@ def build_parser() -> argparse.ArgumentParser:
     set_parser = commands.add_parser("set", help="save or replace an alias")
     set_parser.add_argument("alias")
     set_parser.add_argument("url", nargs="?")
-    set_parser.add_argument("--stdin", action="store_true", help="read the URL from stdin")
+    set_parser.add_argument(
+        "--stdin", action="store_true", help="read the URL from stdin"
+    )
 
     resolve_parser = commands.add_parser("resolve", help="resolve one alias")
     resolve_parser.add_argument("alias")

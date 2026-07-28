@@ -29,6 +29,9 @@ host when it loaded the skill. Do not search the whole filesystem.
 Use:
 
 - `scripts/config.py` for config creation, URL validation, and alias operations.
+- `scripts/send.py` for actual delivery. It resolves destination fallbacks, validates and
+  normalizes the payload, keeps the URL out of the curl process arguments, handles bounded HTTP
+  429 retries, and preserves duplicate-safe failure semantics.
 - `references/discord-webhook-api.md` for payload fields, limits, and curl examples. Read it before
   sending anything beyond a basic text message.
 
@@ -43,14 +46,15 @@ Initialize the config at the start of any config or send operation:
 python3 "$SKILL_DIR/scripts/config.py" init
 ```
 
-Resolve destinations in this order:
+For sends, `scripts/send.py` resolves destinations in this order:
 
 1. If the user names a destination such as `xablau`, resolve that alias from the config.
 2. If the alias is absent, use an explicit webhook URL supplied for this request.
 3. Otherwise, use `DISCORD_WEBHOOK_URL` when it is non-empty.
 4. If none resolves, ask the user for a saved alias or webhook URL.
 
-Capture an alias without displaying its URL:
+Resolve an alias manually only for config inspection or maintenance. Capture it without displaying
+its URL:
 
 ```bash
 WEBHOOK_URL="$(python3 "$SKILL_DIR/scripts/config.py" resolve "$DESTINATION")"
@@ -81,20 +85,56 @@ Do not silently save a fallback URL under a missing alias.
 
 ## Send a message
 
-1. Resolve and validate `WEBHOOK_URL`.
-2. Translate the user's request into a Discord payload. Require at least one of `content`, `embeds`,
-   `poll`, or a file.
-3. Add `allowed_mentions.parse: []` unless the user explicitly requests notifications.
-4. Serialize dynamic content with a JSON serializer. Do not interpolate untrusted text into JSON or
+1. Translate the user's request into a Discord payload. Require at least one of `content`, `embeds`,
+   `poll`, non-interactive `components`, or a file.
+2. Add `allowed_mentions.parse: []` unless the user explicitly requests notifications. The sender
+   injects this safe default when the field is absent.
+3. Serialize dynamic content with a JSON serializer. Do not interpolate untrusted text into JSON or
    shell syntax.
-5. Use `application/json` for messages without files. Use `multipart/form-data` with
-   `payload_json` and indexed `files[n]` parts for attachments.
-6. Add `thread_id` as a query parameter for an existing thread. Put `thread_name` and
+4. For Components V2, use only non-interactive display and layout types documented in the
+   reference. Do not combine them with `content`, `embeds`, `poll`, or files.
+5. Put `thread_name` and
    `applied_tags` in the payload when creating a forum or media-channel thread.
-7. Execute immediately with `curl`. Do not use a general POST retry option because an ambiguous
-   timeout or server error could duplicate a message.
+6. Write the JSON to a mode-`0600` temporary file and invoke `scripts/send.py`. It uses
+   `application/json` without files and `multipart/form-data` with `payload_json` and indexed
+   `files[n]` parts for attachments.
 
-Basic text pattern:
+Send to a named alias, allowing automatic fallback to `DISCORD_WEBHOOK_URL` if the alias is absent:
+
+```bash
+python3 "$SKILL_DIR/scripts/send.py" \
+  --alias "$DESTINATION" \
+  --payload "$PAYLOAD_FILE"
+```
+
+When the user supplies an explicit fallback URL, keep it out of process arguments:
+
+```bash
+printf '%s\n' "$EXPLICIT_WEBHOOK_URL" |
+  python3 "$SKILL_DIR/scripts/send.py" \
+    --alias "$DESTINATION" \
+    --explicit-url-stdin \
+    --payload "$PAYLOAD_FILE"
+```
+
+Omit `--alias "$DESTINATION"` when the user supplies only a URL and no destination name.
+
+Add an existing thread and one or more files as needed:
+
+```bash
+python3 "$SKILL_DIR/scripts/send.py" \
+  --alias "$DESTINATION" \
+  --payload "$PAYLOAD_FILE" \
+  --thread-id "$THREAD_ID" \
+  --file "$FILE_PATH"
+```
+
+The sender validates the official Discord URL, permits supported non-interactive components while
+rejecting interactive or unsupported types, injects safe mention defaults, validates common
+Discord limits, adds `wait=true` (and `with_components=true` when needed), and calls `curl`
+immediately. It never performs a general retry after transport errors or HTTP 5xx responses.
+
+Basic curl API pattern for reference:
 
 ```bash
 curl --proto '=https' \
@@ -111,16 +151,16 @@ curl --proto '=https' \
 JSON
 ```
 
-For dynamic content, write a mode-`0600` temporary payload with `python3` and `json.dump`, send it
-with `--data-binary "@$PAYLOAD_FILE"`, then remove it. Keep temporary response bodies mode `0600`
-too.
+For dynamic content, write the mode-`0600` payload with `python3` and `json.dump`, invoke the
+sender, then remove it with a trap or equivalent cleanup.
 
 ## Handle the response
 
 - Treat a successful 2xx response with `wait=true` as confirmed. Report the destination alias or
   source and returned message ID when available, but never the URL or token.
-- On HTTP 429, read `Retry-After` or `retry_after`, wait that duration, and retry at most three
-  times. A 429 rejects the request, so this bounded retry does not duplicate an accepted message.
+- The sender handles HTTP 429 by reading `Retry-After` or `retry_after`, waiting that duration, and
+  retrying at most three times. A 429 rejects the request, so this bounded retry does not duplicate
+  an accepted message.
 - On HTTP 400, report Discord's validation error and correct the payload only when the intent is
   unambiguous.
 - On HTTP 401, 403, or 404, stop without retrying. Explain that the webhook may be invalid,
