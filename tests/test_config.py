@@ -90,6 +90,20 @@ class ConfigScriptTests(unittest.TestCase):
                 self.assertNotIn(invalid_url, result.stderr)
                 self.assertNotIn("token", result.stderr)
 
+    def test_rejects_webhook_urls_in_process_arguments(self) -> None:
+        for command in ("set", "validate"):
+            with self.subTest(command=command):
+                arguments = (
+                    (command, "alerts", URL_ONE)
+                    if command == "set"
+                    else (command, URL_ONE)
+                )
+                result = self.run_config(*arguments)
+                self.assertEqual(result.returncode, 2)
+                self.assertIn("use --stdin", result.stderr)
+                self.assertNotIn(URL_ONE, result.stderr)
+                self.assertNotIn("first_token", result.stderr)
+
     def test_rejects_malformed_and_duplicate_entries(self) -> None:
         self.config_path.parent.mkdir(mode=0o700)
         self.config_path.write_text(

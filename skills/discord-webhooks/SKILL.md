@@ -17,6 +17,8 @@ Discord's incoming webhook endpoint directly with `curl`.
 - Never follow redirects when sending. Require HTTPS and validate the URL with the bundled helper.
 - Default to `"allowed_mentions": {"parse": []}`. Enable only the exact mentions the user requests.
 - Always add `wait=true` so Discord confirms creation and returns the message.
+- Use the bundled scripts for generated automation: `config.py` for destinations and `send.py` for
+  delivery. Treat the curl snippets in the reference as protocol examples, not script templates.
 - Do not send interactive components. Do not edit, fetch, or delete webhook messages.
 - Do not ask for confirmation after an explicit send request. Clarify only missing or ambiguous
   destination, content, files, thread, poll, or mention behavior.
@@ -24,7 +26,16 @@ Discord's incoming webhook endpoint directly with `curl`.
 ## Locate the bundled resources
 
 Set `SKILL_DIR` to the absolute directory containing this `SKILL.md`, using the path supplied by the
-host when it loaded the skill. Do not search the whole filesystem.
+host when it loaded the skill. In a generated shell script, require that host-supplied path; never
+derive it from `$0`, the current directory, or a filesystem search:
+
+```bash
+: "${SKILL_DIR:?Set SKILL_DIR to the discord-webhooks skill directory}"
+python3 "$SKILL_DIR/scripts/config.py" init
+```
+
+Run `config.py init` before every generated config-management or delivery workflow, even though
+the helpers can create the config lazily.
 
 Use:
 
@@ -85,19 +96,36 @@ Do not silently save a fallback URL under a missing alias.
 
 ## Send a message
 
-1. Translate the user's request into a Discord payload. Require at least one of `content`, `embeds`,
+1. Require the host-provided `SKILL_DIR` and run `config.py init`.
+2. Translate the user's request into a Discord payload. Require at least one of `content`, `embeds`,
    `poll`, non-interactive `components`, or a file.
-2. Add `allowed_mentions.parse: []` unless the user explicitly requests notifications. The sender
-   injects this safe default when the field is absent.
-3. Serialize dynamic content with a JSON serializer. Do not interpolate untrusted text into JSON or
+3. Include `allowed_mentions.parse: []` unless the user explicitly requests notifications. The
+   sender also injects this safe default when the field is absent, but include it in generated
+   payloads so their safety is visible.
+4. Serialize dynamic content with a JSON serializer. Do not interpolate untrusted text into JSON or
    shell syntax.
-4. For Components V2, use only non-interactive display and layout types documented in the
-   reference. Do not combine them with `content`, `embeds`, `poll`, or files.
-5. Put `thread_name` and
+5. For Components V2, use only non-interactive display and layout types documented in the
+   reference. Do not combine them with `content`, `embeds`, `poll`, or files. Do not put
+   `flags: 32768` or `with_components` in a payload sent through `send.py`; the sender adds the
+   required flag and query parameter.
+6. Put `thread_name` and
    `applied_tags` in the payload when creating a forum or media-channel thread.
-6. Write the JSON to a mode-`0600` temporary file and invoke `scripts/send.py`. It uses
+7. Write the JSON to a mode-`0600` temporary file and invoke `scripts/send.py`—never call curl
+   directly from generated automation. It uses
    `application/json` without files and `multipart/form-data` with `payload_json` and indexed
    `files[n]` parts for attachments.
+
+Use this secure temporary-file pattern in generated shell scripts:
+
+```bash
+umask 077
+PAYLOAD_FILE="$(mktemp)"
+chmod 600 "$PAYLOAD_FILE"
+trap 'rm -f "$PAYLOAD_FILE"' EXIT HUP INT TERM
+```
+
+Write dynamic payloads with `python3` and `json.dump`; pass values through Python arguments or
+environment variables rather than interpolating them into a JSON heredoc.
 
 Send to a named alias, allowing automatic fallback to `DISCORD_WEBHOOK_URL` if the alias is absent:
 
@@ -119,6 +147,19 @@ printf '%s\n' "$EXPLICIT_WEBHOOK_URL" |
 
 Omit `--alias "$DESTINATION"` when the user supplies only a URL and no destination name.
 
+For a URL-only script that reads `DISCORD_WEBHOOK_URL`, use this exact validation and delivery
+shape:
+
+```bash
+: "${DISCORD_WEBHOOK_URL:?Set DISCORD_WEBHOOK_URL}"
+printf '%s\n' "$DISCORD_WEBHOOK_URL" |
+  python3 "$SKILL_DIR/scripts/config.py" validate --stdin
+printf '%s\n' "$DISCORD_WEBHOOK_URL" |
+  python3 "$SKILL_DIR/scripts/send.py" \
+    --explicit-url-stdin \
+    --payload "$PAYLOAD_FILE"
+```
+
 Add an existing thread and one or more files as needed:
 
 ```bash
@@ -134,25 +175,9 @@ rejecting interactive or unsupported types, injects safe mention defaults, valid
 Discord limits, adds `wait=true` (and `with_components=true` when needed), and calls `curl`
 immediately. It never performs a general retry after transport errors or HTTP 5xx responses.
 
-Basic curl API pattern for reference:
-
-```bash
-curl --proto '=https' \
-  --silent --show-error --fail-with-body \
-  --connect-timeout 10 --max-time 30 \
-  --request POST \
-  --header 'Content-Type: application/json' \
-  --data-binary @- \
-  "${WEBHOOK_URL}?wait=true" <<'JSON'
-{
-  "content": "Deployment completed.",
-  "allowed_mentions": {"parse": []}
-}
-JSON
-```
-
-For dynamic content, write the mode-`0600` payload with `python3` and `json.dump`, invoke the
-sender, then remove it with a trap or equivalent cleanup.
+Use the curl examples in `references/discord-webhook-api.md` only to understand Discord's raw HTTP
+shape. Generated scripts must use `send.py` so URL secrecy, validation, retries, and
+duplicate-safe failure behavior remain consistent.
 
 ## Handle the response
 

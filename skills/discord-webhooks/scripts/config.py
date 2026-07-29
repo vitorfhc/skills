@@ -165,14 +165,14 @@ def write_config(path: Path, aliases: dict[str, str]) -> None:
 def read_url_argument(url: str | None, read_stdin: bool) -> str:
     if read_stdin and url is not None:
         raise ConfigError(
-            "provide the URL either as an argument or through --stdin, not both"
+            "do not pass webhook URLs as process arguments; use --stdin"
         )
     if read_stdin:
         value = sys.stdin.readline().rstrip("\r\n")
     elif url is not None:
-        value = url
+        raise ConfigError("do not pass webhook URLs as process arguments; use --stdin")
     else:
-        raise ConfigError("provide a webhook URL or use --stdin")
+        raise ConfigError("provide the webhook URL through --stdin")
     if not value:
         raise ConfigError("webhook URL cannot be empty")
     return value
@@ -194,7 +194,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     set_parser = commands.add_parser("set", help="save or replace an alias")
     set_parser.add_argument("alias")
-    set_parser.add_argument("url", nargs="?")
+    set_parser.add_argument("url", nargs="?", help=argparse.SUPPRESS)
     set_parser.add_argument(
         "--stdin", action="store_true", help="read the URL from stdin"
     )
@@ -208,7 +208,7 @@ def build_parser() -> argparse.ArgumentParser:
     remove_parser.add_argument("alias")
 
     validate_parser = commands.add_parser("validate", help="validate without saving")
-    validate_parser.add_argument("url", nargs="?")
+    validate_parser.add_argument("url", nargs="?", help=argparse.SUPPRESS)
     validate_parser.add_argument(
         "--stdin", action="store_true", help="read the URL from stdin"
     )

@@ -168,7 +168,9 @@ Use `multipart/form-data` whenever files are present:
 ## Curl examples
 
 Assume `WEBHOOK_URL` already contains a validated, secret base URL. Never replace it with a literal
-URL in commands or documentation.
+URL in commands or documentation. These examples show Discord's raw HTTP protocol. When producing
+an executable workflow for a user, invoke `scripts/send.py` instead; it runs curl with the URL in a
+private curl config and applies the safety rules from `SKILL.md`.
 
 ### Text, username, avatar, TTS, and flags
 
@@ -258,6 +260,10 @@ JSON
 ```
 
 ### Non-interactive Components V2
+
+This raw-curl example includes `flags: 32768` and `with_components=true` because Discord requires
+them at the HTTP layer. Do not copy either into a payload passed to `scripts/send.py`; the bundled
+sender adds both automatically.
 
 ```bash
 curl --proto '=https' \
