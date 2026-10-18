@@ -7,7 +7,7 @@ become the creative brief that every later workflow follows.
 
 Read the prompt and any attached material, such as brand guidelines, logos, product screenshots,
 scripts, or reference videos. Note what it already settles: subject, objective, audience, tone,
-duration, aspect ratio, voiceover, language, and delivery constraints.
+duration, aspect ratio, voiceover, language, delivery constraints, and any visual references.
 
 Check which parameters are set, either as `name=value` in the skill arguments or the request, or in
 plain language: `duration`, `aspect`, and `voiceover`.
@@ -27,7 +27,6 @@ video:
 | Objective | Explainer, product showcase, brand introduction, promotion, conceptual piece, or technical visualization |
 | Audience | Prior knowledge, depth of explanation, and vocabulary |
 | Central message | The one idea the viewer must understand, remember, or feel |
-| Visual direction | The default identity, an existing brand, or a different mood |
 | Destination | Website, social feed, talk, or presentation, which shapes the opening hook and pacing |
 | Ending | A seamless loop or a definitive conclusion, such as a call to action |
 | Music | Silent, or synced to a music track the user supplies |
@@ -36,6 +35,7 @@ Rules for choosing:
 
 - There is no fixed number of questions. Ask as many as the request needs, and no more. Every
   question should change the video.
+- Leave the look and feel for [Style direction](style.md), which asks about it next.
 - Ask about intent, never about craft. Scenes, keyframes, transitions, layers, camera, timing, and
   visual metaphors are yours to decide.
 - Do not ask what the prompt or parameters already answer clearly.
@@ -61,7 +61,6 @@ Ask with `AskUserQuestion`:
   each answer changes text density and pacing.
 - The user can enter any other value under "Other".
 - Set `multiSelect: true` only when choices can combine, such as which product features to show.
-- Add a `preview` only when an ASCII mockup or palette sample helps compare visual directions.
 
 Example first call for "Make a motion-design video about how DNS resolution works":
 
@@ -128,7 +127,7 @@ Turn the parameters and answers into a short internal creative brief:
 - Subject and objective.
 - Audience and depth.
 - Central message.
-- Visual direction and brand constraints.
+- Brand assets and visual references the user attached.
 - Duration, aspect ratio, and voiceover.
 - Destination, ending, and music.
 - Anything the user wrote under "Other" or in notes, verbatim when it is a constraint.
@@ -136,4 +135,4 @@ Turn the parameters and answers into a short internal creative brief:
 For anything still open, choose the recommended default and record it as an assumption. The brief
 overrides the defaults in SKILL.md wherever they conflict.
 
-Continue with [Research](research.md).
+Continue with [Style direction](style.md).

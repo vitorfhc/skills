@@ -56,13 +56,38 @@ and animated with precise typography, geometric transformations, continuous tran
 consistent design system. It suits explainers, product showcases, brand introductions, promotional
 content, and technical visualizations.
 
-The skill first asks clarifying questions about the request with Claude Code's `AskUserQuestion`
-tool, or in a plain message for agents without it. Length, aspect ratio, and voiceover are always
-the user's choice, so it asks for each one you do not set as a parameter. After that it makes every
-creative decision itself, working through six workflows in `workflows/`: clarify, research,
-concept and structure, design system, animate, and review. It renders with a short side of at
-least 1080 pixels and defaults to Geist typography and a dark palette. It bundles no renderer. The agent animates with the tools available in its
-environment and reports anything it could not render.
+The skill works as a back-and-forth with you, using Claude Code's `AskUserQuestion` tool, or plain
+messages for agents without it:
+
+1. **Clarify:** questions about the goal, audience, and format. Length, aspect ratio, and voiceover
+   are always your choice, so it asks for each one you do not set as a parameter.
+2. **Style direction:** a second round about the look, offering two or three directions tailored to
+   your subject, with ASCII previews and palettes, then refining the chosen one.
+3. **Design:** after researching and storyboarding, it renders style frames for your approval.
+4. **Animation:** it renders a draft and asks for your reaction before the final render.
+5. **Review:** it checks the final render, delivers it, and offers a round of revisions.
+
+It never asks you to design scenes, timing, or transitions; it proposes and you react. The only hard
+rules live in `principles.md`: pacing, legibility, semantic color, continuity, safe areas, and
+effects that serve meaning. The look comes from a library of style cards in `styles/`, which the
+agent adapts, blends, or extends with a custom card for your reference:
+
+| Style | Essence |
+|-------|---------|
+| Editorial Minimal | Precise geometry and type on a dark field |
+| Blueprint Pencil | One unbroken line evolving from sketch to blueprint to hologram |
+| Technical Drawing | An engineering sheet drawing itself around a turning object |
+| Halftone Xerox | Photocopied zine with dot screens, few inks, and misregistration |
+| Kinetic HUD | Beat-driven type, interface fragments, and camera hits |
+| Refractive Glass | A hero object of glass bending the scene behind it |
+| Exploded Cutaway | A real object cut open and separated into labeled parts |
+| Continuous Flight | One camera journey through waypoints in a world |
+| Soft-Body Toy | Squishy gummy objects that squash, bounce, and jiggle |
+| Swiss Kinetic Type | Huge type on a strict grid, moving with the sentence |
+| Data Story | Charts that build, morph, and annotate one highlighted series |
+
+It renders with a short side of at least 1080 pixels. It bundles no renderer. The agent animates
+with the tools available in its environment and reports anything it could not render.
 
 Install it with:
 
@@ -113,6 +138,10 @@ The Discord Webhooks skill incorporates the
 [Discord Webhooks Guide](https://birdie0.github.io/discord-webhooks-guide/discord_webhook.html) and
 cross-checks it against the current
 [official Discord webhook documentation](https://docs.discord.com/developers/resources/webhook#execute-webhook).
+
+The Motion Design Video style cards are distilled from the community showcase at
+[skillry.dev/ai-videos](https://skillry.dev/ai-videos/opus-5-5), adapted from interactive and
+real-time pieces where needed so they render as video.
 
 ## License
 

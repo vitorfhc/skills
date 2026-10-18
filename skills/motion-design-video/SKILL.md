@@ -1,12 +1,12 @@
 ---
 name: motion-design-video
 description: >
-  Create premium motion-design videos about any subject. Research the topic,
-  develop a visual narrative, and produce sophisticated animations using
-  precise typography, geometric transformations, continuous transitions,
-  and a consistent design system. Use for explainers, product showcases,
-  educational videos, conceptual animations, introductions, promotional
-  content, and technical visualizations.
+  Create premium motion-design videos about any subject. Clarify the brief and the look with the
+  user, research the topic, develop a visual narrative, and animate it in a style chosen together,
+  such as editorial minimal, blueprint line drawing, halftone print, kinetic HUD, refractive
+  glass, exploded 3D cutaways, or continuous camera flights, with checkpoints on style frames and
+  a draft. Use for explainers, product showcases, educational videos, conceptual animations,
+  introductions, promotional content, and technical visualizations.
 ---
 
 # Motion Design Video
@@ -37,41 +37,56 @@ unset parameter during [Clarify](workflows/clarify.md).
 ## Workflows
 
 Run these workflows in order. Read each file when you reach its step, not before. Each workflow
-ends with an output that the next one builds on.
+ends with an output that the next one builds on. At every checkpoint, wait for the user's answer
+before continuing.
 
-| Step | Workflow | Output |
-|------|----------|--------|
-| 1 | [Clarify](workflows/clarify.md) | Creative brief, including every parameter |
-| 2 | [Research](workflows/research.md) | Verified claims, central message, visual opportunities |
-| 3 | [Concept and structure](workflows/concept.md) | Visual concept, motifs, internal storyboard |
-| 4 | [Design system](workflows/design-system.md) | Typography, semantic colors, composition, restraint rules |
-| 5 | [Animate](workflows/animate.md) | Implemented and rendered animation |
-| 6 | [Review and deliver](workflows/review.md) | Revised, verified final deliverable |
+| Step | Workflow | Output | Checkpoint |
+|------|----------|--------|------------|
+| 1 | [Clarify](workflows/clarify.md) | Creative brief, including every parameter | Questions about intent and format |
+| 2 | [Style direction](workflows/style.md) | Chosen style and how it adapts | Questions about the look |
+| 3 | [Research](workflows/research.md) | Verified claims, central message, visual opportunities | — |
+| 4 | [Concept and structure](workflows/concept.md) | Visual concept, motifs, internal storyboard | — |
+| 5 | [Design system](workflows/design-system.md) | Design system and approved style frames | Style frames |
+| 6 | [Animate](workflows/animate.md) | Approved draft and final render | Draft video |
+| 7 | [Review and deliver](workflows/review.md) | Verified final deliverable | Revisions |
 
-Never skip Clarify. Skip Research only when the subject needs no factual grounding, such as a
-purely abstract piece.
+Never skip Clarify or Style direction. Skip Research only when the subject needs no factual
+grounding, such as a purely abstract piece.
 
 When `voiceover` is `yes`, also follow [Voiceover script](workflows/voiceover-script.md): draft
-it in step 3 and finalize it in step 6.
+it in step 4 and finalize it in step 7.
+
+## Rules and Freedom
+
+The [principles](principles.md) are the only hard rules: communication, pacing, legibility,
+semantic color, continuity, effects that serve meaning, and the frame. Read them before the design
+system and keep them through review.
+
+Everything about the look is open. The [style cards](styles/index.md) are starting points that
+show what a style can be. Adapt them, blend them, bend them for the subject, or invent a new
+direction when none fits.
 
 ## Pacing
 
 > **Warning:** Generated videos consistently run too fast. Viewers need time to read each label,
 > follow each movement, and absorb each result before the next change. Err on the side of slow.
 
-Follow the minimum timings in the Pacing section of [Animate](workflows/animate.md). When the
+Follow the minimum timings in the Pacing section of the [principles](principles.md). When the
 content does not fit the duration, cut ideas. Never speed up the motion to make it fit.
 
 ## Non-negotiables
 
-- Run [Clarify](workflows/clarify.md) before researching or designing anything, and ask its
-  questions with the `AskUserQuestion` tool.
+- Run [Clarify](workflows/clarify.md) and then [Style direction](workflows/style.md) before
+  researching or designing anything, and ask their questions with the `AskUserQuestion` tool.
 - Never choose the duration, aspect ratio, or voiceover plan yourself. Take each from its parameter
   or ask for it.
-- After the brief, own every creative decision. Never ask the user for scenes, keyframes,
-  transitions, layer structures, camera placement, animation timing, or visual metaphors.
-- Do not fabricate technical behavior, scientific mechanisms, historical facts, or product
-  capabilities.
+- Ask the user about intent and taste, and show concrete proposals to react to. Never ask the user
+  for scenes, keyframes, transitions, layer structures, camera placement, animation timing, or
+  visual metaphors. Those decisions are yours.
+- Show style frames before animating and a draft before the final render, and wait for the user's
+  reaction to each.
+- Do not fabricate technical behavior, scientific mechanisms, historical facts, product
+  capabilities, or data.
 - Never claim a video was produced unless it was rendered. Follow the delivery rules in
   [Review and deliver](workflows/review.md).
 
@@ -83,8 +98,8 @@ Apply these unless the user or the creative brief says otherwise:
 - 30 frames per second, exported as an H.264 MP4 with the settings in
   [Animate](workflows/animate.md).
 - On-screen text in the language of the user's request.
-- Geist and Geist Mono with the default palette in [Design system](workflows/design-system.md).
-- A locked, front-facing, orthographic camera.
+
+There is no default style. [Style direction](workflows/style.md) chooses one with the user.
 
 ## Creative Priorities
 

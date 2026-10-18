@@ -1,97 +1,48 @@
 # Animate
 
-Implement the storyboard with the design system. Motion is the primary storytelling mechanism.
-
-Prioritize:
-
-- Smooth continuity.
-- Precise timing.
-- Meaningful transformations.
-- Readability.
-- Spatial consistency.
-- Professional easing.
+Implement the storyboard in the approved design system. Motion is the primary storytelling
+mechanism. Show the user a draft before the final render.
 
 ## Motion Language
 
-Prefer **transformation over replacement**. Objects should evolve naturally from one state into
-another.
+The design system sets the motion character: how things ease, how scenes connect, and how the
+camera behaves. Within it, every movement should reveal something, such as a relationship, a
+cause, or a change of state.
 
-### Continuous Transformation
+Transformation is the strongest default in motion design. Deriving new elements from existing ones
+lets the viewer follow. Draw on this vocabulary, not as a storyboard:
 
-Whenever possible, derive each new scene from existing visual elements:
+- Lines becoming shapes, shapes becoming letters, letters becoming diagrams.
+- Numbers becoming geometry, and objects becoming data.
+- Grids reorganizing, boundaries becoming paths, and components merging into systems.
+- Mask reveals, unfolding, morphing, splitting, and merging.
 
-- Lines becoming shapes.
-- Shapes becoming letters.
-- Letters becoming diagrams.
-- Diagrams becoming interfaces.
-- Interfaces becoming abstract compositions.
-- Numbers becoming geometric objects.
-- Objects becoming data visualizations.
-- Grids transforming into other spatial structures.
-- Boundaries becoming paths.
-- Components merging into larger systems.
+Styles also connect scenes by camera flight, match cuts, beat cuts, or physical action. Use what the
+design system calls for, and keep object identity as the [principles](../principles.md) require.
 
-These examples define a visual vocabulary, not a required storyboard. Choose transformations that
-are appropriate to the subject.
+## Timeline
 
-### Object Identity
+Before implementing, write the timeline as a table of beats with their motion and hold times.
+Check it against the Pacing section of the [principles](../principles.md), and fix anything that
+rushes.
 
-Preserve recognizable properties when objects transform. An object may change its position,
-scale, rotation, shape, color, representation, or function, but its transition should remain
-visually understandable.
+## Easing Toolkit
 
-When a transformation represents a conceptual relationship, that relationship should be
-recognizable through the animation.
+Choose easing that matches the design system's motion character:
 
-### Transitions
+| Character | Tool |
+|-----------|------|
+| Precise settle, no overshoot | Critically damped spring |
+| Playful overshoot and jiggle | Underdamped spring |
+| Crisp wipes, presses, and exits | Exponential in/out |
+| Cinematic camera and long moves | Cubic or quintic in/out |
+| Continuous movement | Linear |
+| Discrete state changes | Stepped |
+| Hand-made feel | Holding each drawing for two or three frames |
 
-Favor:
-
-- Shape morphing.
-- Geometric unfolding.
-- Path transformations.
-- Object merging and separation.
-- Mask-based reveals.
-- Spatial reorganization.
-- Typographic transformations.
-- Continuous line motion.
-- Structural expansion and contraction.
-
-Avoid disconnected scene transitions. The viewer should perceive the video as one coherent visual
-system.
-
-## Physics and Timing
-
-Motion should feel precise, controlled, and intentional.
-
-### Pacing
-
-Generated animations consistently run too fast. Set every timing on the slow side, then check it.
-
-| Element | Minimum |
-|---------|---------|
-| Motion the viewer must follow | 0.6 seconds, and 0.8 to 1.5 seconds for major transformations |
-| Hold after each settled change | 1 second before the next change starts |
-| On-screen text, settled and legible | 1.5 seconds, or 0.4 seconds per word, whichever is longer |
-| Each new idea | About 4 seconds on screen before the next one appears |
-| Final frame | 2 seconds, unless the video loops |
-
-- Introduce one new idea at a time, and run only one primary motion at once.
-- A settled frame that the viewer is reading or absorbing is not idle time.
-- When the content does not fit the duration, cut ideas. Never compress these timings.
-- With a planned voiceover, the narration sets the pace, and these minimums still apply.
-
-Before rendering, write out the timeline as a table of beats with their motion and hold times, and
-fix anything below these minimums.
-
-### Easing
-
-For positioning, prefer critically damped spring behavior:
-
-`f(t) = 1 - (1 + ωt)e^(-ωt)`
-
-This approaches the destination smoothly without overshooting. The spring is 99% settled at
-`ωt ≈ 6.6`, so derive `ω` from the motion's duration in seconds: `ω = 6.6 / duration`.
+The critically damped spring is `f(t) = 1 - (1 + ωt)e^(-ωt)`. It settles without overshoot and
+is 99% settled at `ωt ≈ 6.6`, so derive `ω` from the motion's duration in seconds:
+`ω = 6.6 / duration`.
 
 | Duration | ω |
 |----------|---|
@@ -100,78 +51,90 @@ This approaches the destination smoothly without overshooting. The spring is 99%
 | 1.0 s | 6.6 |
 | 1.5 s | 4.4 |
 
-| Motion | Interpolation |
-|--------|---------------|
-| Positioning | Critically damped spring |
-| Wipes, presses, and exits | Exponential ease-in/out |
-| Continuous movement | Linear |
-| Discrete state changes | Stepped |
+The underdamped spring with damping ratio `ζ < 1` is
+`f(t) = 1 - e^(-ζωt)(cos(ω_d t) + (ζ / √(1 - ζ²)) sin(ω_d t))`, where `ω_d = ω√(1 - ζ²)`. Lower
+`ζ` bounces more: 0.3 is rubbery and 0.7 barely overshoots.
 
-Avoid exaggerated elastic effects.
-
-### Rhythm
+## Rhythm
 
 Establish a deliberate motion rhythm. Synchronize animations that communicate related events. Use
-timing to create anticipation, emphasis, cause and effect, contrast, visual progression, and
-resolution.
+timing to create anticipation, emphasis, cause and effect, contrast, progression, and resolution.
 
-When appropriate, synchronize animation with an underlying beat. Do not force an arbitrary BPM or
-fixed scene duration. The subject should determine the pacing.
+When appropriate, synchronize animation with an underlying beat. With a music track, land key
+moments on it. Without one, let the subject set the pace rather than an arbitrary BPM.
 
 With a planned voiceover, time each beat to its narration line in the storyboard, and render
 without an audio track so the narration can be laid over it.
 
-### Motion Density
+## Motion Density
 
-Maintain visual activity without overwhelming the audience. Avoid:
+Keep meaningful change on screen without overwhelming the viewer. Avoid long stretches without
+change, several unrelated animations competing for attention, and movement that exists only to
+fill time. Use faster transitions once a relationship is established, but never go below the
+pacing minimums.
 
-- Long periods without meaningful change.
-- Several unrelated animations competing for attention.
-- Excessive simultaneous transformations.
-- Movement that exists only to fill time.
+## Camera
 
-Allow complex ideas enough time to become understandable. Use faster transitions when the
-relationship is already established, but never go below the minimums in Pacing.
-
-## Camera and Space
-
-Default to a locked, front-facing, orthographic camera. The composition should feel like a
-precisely designed canvas.
-
-Prefer moving objects over moving the camera. Objects may rotate, translate, scale, deform,
-unfold, intersect, separate, or rearrange spatially. Represent depth through layering,
-perspective, or geometric construction when appropriate.
-
-Avoid unnecessary camera movement. If the subject genuinely benefits from camera movement, use it
-deliberately and consistently. Do not introduce cinematic motion merely to create spectacle.
+Follow the design system. Whatever the camera does, keep it consistent, and move it only when the
+movement carries meaning, such as following a path, revealing scale, or reframing for the next
+idea.
 
 ## Typography as Motion
 
-Text should participate in the visual storytelling:
+Text should take part in the storytelling:
 
-- Words transforming into geometric shapes.
-- Letters assembling from lines.
-- Characters revealing through masks.
-- Labels emerging from objects.
+- Words transforming into shapes, and letters assembling from lines.
+- Characters revealed through masks, and labels emerging from objects.
 - Numbers interpolating between values.
-- Text compressing into structural elements.
 - Equations transforming into visual representations.
-- Typography following paths.
-- Words becoming components of diagrams.
+- Words becoming components of diagrams, or following paths.
 
-Prefer short, meaningful text. Avoid large paragraphs inside the video. Use typography to reinforce
-the central idea rather than narrate every visible action.
+Use strong typographic moments selectively, and let moving text land before its reading hold
+begins.
 
-Maintain readability. Important text should remain visible long enough to be understood. Use
-strong typographic moments selectively.
+## Render Deterministically
 
-## Render
+A video renders frame by frame, often slower than real time. Several styles come from interactive
+or real-time pieces, so adapt their techniques:
 
-Choose an animation toolchain that the environment can actually execute and render. Render at the
-resolution and aspect ratio from the design system.
+- Derive every value from the frame number, as `t = frame / fps`. Never read a wall clock,
+  `requestAnimationFrame` timestamps, or `Date.now()`.
+- Seed all randomness, such as grain, particles, and jitter, from a fixed seed and the frame number.
+- Replace interactions, such as orbit controls, buttons, hover, and drag, with choreographed camera
+  moves and timed events.
+- Bake physics ahead of time at a fixed timestep and look it up by frame, or author it with springs.
+- Wait for fonts, textures, and models to load before capturing the first frame.
+- Make motion blur by accumulating sub-frame samples, not with a real-time effect.
 
-Install Geist and Geist Mono before rendering, such as from Google Fonts or the `geist` npm
-package. Render a test frame and confirm that the text uses them rather than a fallback font.
+Choose a toolchain that the environment can actually execute and render, as the style frames
+proved.
+
+## Draft and Checkpoint
+
+Render a draft of the whole video with final timing. When rendering is slow, render it at half the
+final resolution. Make a contact sheet of one frame every few seconds, such as
+`ffmpeg -i draft.mp4 -vf "fps=1/4,scale=480:-1,tile=4x3" -frames:v 1 draft-sheet.png`.
+
+Watch the draft yourself first. Check pacing, legibility, and the principles, and fix obvious
+problems before showing it.
+
+Then show the user the draft and contact sheet paths, and ask with `AskUserQuestion` how it feels,
+with options tailored to what is most uncertain, such as:
+
+- `Ready for final (Recommended)`: render at full quality.
+- `Pacing`: some moments feel too fast or too slow, named in notes.
+- `Change a moment`: a beat to rework, named in notes.
+- `Look`: something in the style feels off.
+
+Translate the reaction into craft changes yourself. Re-render the draft after substantial changes
+and ask again. When the user wants it faster, tighten transitions and cut beats before shortening
+reading holds, and say so when a request would break the pacing minimums.
+
+## Final Render
+
+Render at the final resolution and aspect ratio. Install every typeface the design system uses
+before rendering, such as from Google Fonts or npm, and confirm in a test frame that text uses
+them rather than a fallback font.
 
 Export with settings that every major platform accepts:
 
@@ -188,6 +151,6 @@ With ffmpeg: `-r 30 -c:v libx264 -profile:v high -pix_fmt yuv420p -crf 18 -movfl
 
 ## Output
 
-The animation source and, when rendering succeeds, the rendered video file.
+The animation source, the approved draft, and the final rendered video.
 
 Continue with [Review and deliver](review.md).

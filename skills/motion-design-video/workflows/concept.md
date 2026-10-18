@@ -34,6 +34,10 @@ objective in the brief:
 
 These are examples, not predefined formats. Choose the most appropriate approach for the subject.
 
+Let the style direction shape the structure too. A Continuous Flight film is a journey between
+waypoints, a Kinetic HUD film is a sequence of hits, and a Blueprint Pencil film is one line's
+evolution. Find the structure where the subject and the style reinforce each other.
+
 ## Find the Visual Concept
 
 Identify the strongest visual relationships and transformations from the research notes.
@@ -80,7 +84,7 @@ unless it contributes meaningfully to the subject or creative direction.
 ## Plan Continuity
 
 Treat the film as one continuous visual composition. Every scene should have a clear relationship
-to what came before. Whenever possible:
+to what came before, connected the way the chosen style connects scenes. Whenever possible:
 
 - Reuse existing geometry.
 - Preserve object identity.
@@ -100,7 +104,7 @@ than changing the length: consolidate or cut beats when it is short, and deepen 
 add beats when it is long, without stretching existing ones. If the message cannot be communicated
 clearly in that time, tell the user and propose a length before animating.
 
-Budget beats against the pacing minimums in [Animate](animate.md): about 4 seconds per new idea.
+Budget beats against the pacing minimums in the [principles](../principles.md): about 4 seconds per new idea.
 A 30-second video fits about six new ideas, not fifteen. Generated videos consistently run too
 fast, so when in doubt, plan fewer beats.
 
