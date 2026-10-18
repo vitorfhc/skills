@@ -7,16 +7,17 @@ become the creative brief that every later workflow follows.
 
 Read the prompt and any attached material, such as brand guidelines, logos, product screenshots,
 scripts, or reference videos. Note what it already settles: subject, objective, audience, tone,
-duration, format, language, and delivery constraints.
+duration, aspect ratio, voiceover, language, and delivery constraints.
 
-Check whether the `duration` parameter is set, either as `duration=<length>` in the skill arguments
-or the request, or as a length stated in plain language.
+Check which parameters are set, either as `name=value` in the skill arguments or the request, or in
+plain language: `duration`, `aspect`, and `voiceover`.
 
 Do not research the subject yet. The questions are about the user's intent, not subject facts.
 
 ## 2. Choose the Questions
 
-Duration is required. Ask for it unless the `duration` parameter already sets it.
+Duration, aspect ratio, and voiceover are required. Ask for each one that its parameter does not
+already set.
 
 Then add a question for every other dimension that is still open and would materially change the
 video:
@@ -27,9 +28,9 @@ video:
 | Audience | Prior knowledge, depth of explanation, and vocabulary |
 | Central message | The one idea the viewer must understand, remember, or feel |
 | Visual direction | The default identity, an existing brand, or a different mood |
-| Format | Aspect ratio and destination, such as a website, social feed, or talk |
+| Destination | Website, social feed, talk, or presentation, which shapes the opening hook and pacing |
 | Ending | A seamless loop or a definitive conclusion, such as a call to action |
-| Audio | Silent, synced to a supplied music track, or timed for a voiceover |
+| Music | Silent, or synced to a music track the user supplies |
 
 Rules for choosing:
 
@@ -45,19 +46,23 @@ Rules for choosing:
 
 Ask with `AskUserQuestion`:
 
-- It accepts up to four questions per call. Put the duration and the most consequential questions
-  in the first call. When more remain, ask them in another call after the answers arrive.
-- Give each question a `header` chip of 12 characters or fewer, such as `Audience`, `Duration`, or
-  `Format`.
+- It accepts up to four questions per call. Put the required questions first, then the most
+  consequential ones. When more remain, ask them in another call after the answers arrive.
+- Give each question a `header` chip of 12 characters or fewer, such as `Duration`, `Aspect`, or
+  `Voiceover`.
 - Give each two to four concrete, mutually exclusive `options`, each with a `description` of what
   choosing it changes in the video. The user can always pick "Other", so never add one.
 - Put the option you recommend first and append `(Recommended)` to its label.
-- For duration, offer lengths that suit the subject and destination, and describe what each length
-  can cover. The user can enter any other length under "Other".
+- For duration, offer lengths that suit the subject and describe what each length can cover.
+- For aspect ratio, offer ratios that suit likely destinations, such as `16:9` for websites and
+  talks, `9:16` for vertical short-form video, `1:1` or `4:5` for social feeds.
+- For voiceover, ask whether narration will be recorded over the video later, and describe how
+  each answer changes text density and pacing.
+- The user can enter any other value under "Other".
 - Set `multiSelect: true` only when choices can combine, such as which product features to show.
 - Add a `preview` only when an ASCII mockup or palette sample helps compare visual directions.
 
-Example for "Make a motion-design video about how DNS resolution works":
+Example first call for "Make a motion-design video about how DNS resolution works":
 
 ```json
 {
@@ -74,6 +79,26 @@ Example for "Make a motion-design video about how DNS resolution works":
       ]
     },
     {
+      "question": "Which aspect ratio should the video use?",
+      "header": "Aspect",
+      "multiSelect": false,
+      "options": [
+        {"label": "16:9 (Recommended)", "description": "Wide frame for websites, talks, and YouTube."},
+        {"label": "9:16", "description": "Vertical frame for Reels, Shorts, and TikTok."},
+        {"label": "1:1", "description": "Square frame for social feeds."},
+        {"label": "4:5", "description": "Portrait frame for Instagram and LinkedIn feeds."}
+      ]
+    },
+    {
+      "question": "Will narration be recorded over the video later?",
+      "header": "Voiceover",
+      "multiSelect": false,
+      "options": [
+        {"label": "No voiceover (Recommended)", "description": "Visuals and on-screen text carry the whole message."},
+        {"label": "Voiceover later", "description": "Leaves room for narration, keeps text sparse, and includes a timed script."}
+      ]
+    },
+    {
       "question": "Who is the DNS video for?",
       "header": "Audience",
       "multiSelect": false,
@@ -82,30 +107,12 @@ Example for "Make a motion-design video about how DNS resolution works":
         {"label": "General public", "description": "Show the lookup as a journey with minimal jargon."},
         {"label": "Students", "description": "Build up hop by hop and define each component."}
       ]
-    },
-    {
-      "question": "What should viewers remember after watching?",
-      "header": "Message",
-      "multiSelect": false,
-      "options": [
-        {"label": "Delegation chain (Recommended)", "description": "Root, TLD, and authoritative servers each point to the next."},
-        {"label": "Caching speed", "description": "Most lookups never leave the local resolver."},
-        {"label": "Fragility", "description": "One misconfigured record can take a site offline."}
-      ]
-    },
-    {
-      "question": "Where will the video be shown?",
-      "header": "Format",
-      "multiSelect": false,
-      "options": [
-        {"label": "Website or talk (Recommended)", "description": "16:9 with a definitive ending."},
-        {"label": "Social feed", "description": "9:16 vertical with a fast opening hook."},
-        {"label": "Background loop", "description": "16:9 seamless loop with minimal text."}
-      ]
     }
   ]
 }
 ```
+
+A second call would then ask about the central message.
 
 Wait for the answers. Do not start research, design, or implementation in the same turn.
 
@@ -121,7 +128,8 @@ Turn the parameters and answers into a short internal creative brief:
 - Audience and depth.
 - Central message.
 - Visual direction and brand constraints.
-- Duration, aspect ratio, ending, and audio.
+- Duration, aspect ratio, and voiceover.
+- Destination, ending, and music.
 - Anything the user wrote under "Other" or in notes, verbatim when it is a constraint.
 
 For anything still open, choose the recommended default and record it as an assumption. The brief

@@ -16,6 +16,9 @@ Check:
 - Is typography readable?
 - Are colors consistent with their semantic roles?
 - Does the runtime match the duration in the brief?
+- Does the frame match the aspect ratio and resolution in the brief?
+- With a planned voiceover, does each beat leave time for its narration line? Without one, does
+  the video communicate its message silently?
 - Are complex ideas adequately explained?
 - Does the animation feel original?
 - Are there factual inaccuracies?
@@ -45,9 +48,9 @@ a generic motion-graphics template.
 
 Unless the user or the brief specifies otherwise, deliver a complete, polished video:
 
-- 16:9.
-- At least 1920 × 1080 when supported.
+- The aspect ratio from the brief, with a short side of at least 1080 pixels when supported.
 - The duration from the brief.
+- With a planned voiceover, a timed narration script alongside the video.
 - On-screen text in the language of the user's request.
 - The established visual identity.
 
@@ -55,5 +58,5 @@ If the environment cannot render or export a video, do not claim the video was p
 provide the most useful supported production deliverable, such as an executable animation project
 or a detailed production specification, and clearly identify what remains unrendered.
 
-In the final response, state the output path, duration, resolution, and any assumptions recorded
-in the brief.
+In the final response, state the output path, duration, aspect ratio, resolution, voiceover plan,
+and any assumptions recorded in the brief.

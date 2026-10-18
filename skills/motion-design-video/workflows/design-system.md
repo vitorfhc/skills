@@ -64,8 +64,9 @@ scenes. Use contrast intentionally to direct attention.
 
 ## Composition
 
-- Use the aspect ratio from the brief, or 16:9 by default.
-- Render at 1920 × 1080 or higher, or the equivalent for other aspect ratios.
+- Use the aspect ratio from the brief.
+- Render with a short side of at least 1080 pixels: 1920 × 1080 for 16:9, 1080 × 1920 for 9:16,
+  1080 × 1080 for 1:1, and 1080 × 1350 for 4:5.
 - Keep rendering high-quality and crisp.
 - Keep margins and alignment consistent.
 - Leave generous negative space.
@@ -73,6 +74,10 @@ scenes. Use contrast intentionally to direct attention.
 
 Maintain safe areas around important content. Avoid placing essential labels near the frame
 boundaries. The composition should remain readable at smaller playback sizes.
+
+Compose for the chosen aspect ratio from the start rather than cropping a wide layout. Vertical
+frames favor stacked arrangements and larger type. On vertical social formats, keep essential
+content clear of the platform interface overlays near the bottom and edges.
 
 ## Visual Restraint
 

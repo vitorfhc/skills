@@ -57,11 +57,11 @@ consistent design system. It suits explainers, product showcases, brand introduc
 content, and technical visualizations.
 
 The skill first asks clarifying questions about the request with Claude Code's `AskUserQuestion`
-tool, or in a plain message for agents without it. The length is always the user's choice, so it
-asks for one unless you set the `duration` parameter. After that it makes every creative decision
-itself, working through six workflows in `workflows/`: clarify, research, concept and structure,
-design system, animate, and review. It defaults to 16:9 at 1920 × 1080, Geist typography, and a
-dark palette. It bundles no renderer. The agent animates with the tools available in its
+tool, or in a plain message for agents without it. Length, aspect ratio, and voiceover are always
+the user's choice, so it asks for each one you do not set as a parameter. After that it makes every
+creative decision itself, working through six workflows in `workflows/`: clarify, research,
+concept and structure, design system, animate, and review. It renders with a short side of at
+least 1080 pixels and defaults to Geist typography and a dark palette. It bundles no renderer. The agent animates with the tools available in its
 environment and reports anything it could not render.
 
 Install it with:
@@ -78,14 +78,21 @@ Create a 15-second product intro for our CLI tool
 Animate the idea of compound interest as an abstract loop
 ```
 
-Set the length up front with the `duration` parameter, in seconds or minutes such as `45s`, `2m`,
-or `1m30s`:
+Set any of these parameters up front to skip its question:
+
+| Parameter | Values |
+|-----------|--------|
+| `duration` | Seconds or minutes, such as `45s`, `2m`, or `1m30s` |
+| `aspect` | Width to height, such as `16:9`, `9:16`, `1:1`, or `4:5` |
+| `voiceover` | `yes` when narration will be recorded over the video later, otherwise `no` |
 
 ```text
-/motion-design-video duration=45s how DNS resolution works
+/motion-design-video duration=45s aspect=9:16 voiceover=yes how DNS resolution works
 ```
 
-In agents without slash commands, include `duration=45s` or a plain-language length in the request.
+In agents without slash commands, include the same `name=value` pairs or plain language, such as
+"a 45-second vertical video we will narrate later", in the request. With `voiceover=yes`, the video
+leaves room for narration, keeps on-screen text sparse, and ships with a timed narration script.
 
 ## Development
 

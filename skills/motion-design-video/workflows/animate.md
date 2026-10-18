@@ -91,6 +91,9 @@ resolution.
 When appropriate, synchronize animation with an underlying beat. Do not force an arbitrary BPM or
 fixed scene duration. The subject should determine the pacing.
 
+With a planned voiceover, time each beat to its narration line in the storyboard, and render
+without an audio track so the narration can be laid over it.
+
 ### Motion Density
 
 Maintain visual activity without overwhelming the audience. Avoid:

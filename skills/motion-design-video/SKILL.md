@@ -20,13 +20,19 @@ animation, excellent typography, and coherent visual storytelling.
 
 ## Parameters
 
-| Parameter | Format | Example |
+| Parameter | Values | Example |
 |-----------|--------|---------|
-| `duration` | Seconds or minutes, such as `15s`, `45s`, `2m`, or `1m30s` | `/motion-design-video duration=45s how DNS resolution works` |
+| `duration` | Seconds or minutes, such as `15s`, `45s`, `2m`, or `1m30s` | `duration=45s` |
+| `aspect` | Width to height, such as `16:9`, `9:16`, `1:1`, or `4:5` | `aspect=9:16` |
+| `voiceover` | `yes` when narration will be recorded over the video later, otherwise `no` | `voiceover=yes` |
 
-Read parameters as `name=value` from the skill arguments or the user's request. A duration stated
-in plain language, such as "a 45-second video", also sets `duration`. When `duration` is unset, ask
-for it during [Clarify](workflows/clarify.md).
+```text
+/motion-design-video duration=45s aspect=9:16 voiceover=yes how DNS resolution works
+```
+
+Read parameters as `name=value` from the skill arguments or the user's request. Plain language
+also sets them, such as "a 45-second vertical video that we will narrate later". Ask for every
+unset parameter during [Clarify](workflows/clarify.md).
 
 ## Workflows
 
@@ -35,7 +41,7 @@ ends with an output that the next one builds on.
 
 | Step | Workflow | Output |
 |------|----------|--------|
-| 1 | [Clarify](workflows/clarify.md) | Creative brief, including the duration |
+| 1 | [Clarify](workflows/clarify.md) | Creative brief, including every parameter |
 | 2 | [Research](workflows/research.md) | Verified claims, central message, visual opportunities |
 | 3 | [Concept and structure](workflows/concept.md) | Visual concept, motifs, internal storyboard |
 | 4 | [Design system](workflows/design-system.md) | Typography, semantic colors, composition, restraint rules |
@@ -49,7 +55,8 @@ purely abstract piece.
 
 - Run [Clarify](workflows/clarify.md) before researching or designing anything, and ask its
   questions with the `AskUserQuestion` tool.
-- Never choose the duration yourself. Take it from the `duration` parameter or ask for it.
+- Never choose the duration, aspect ratio, or voiceover plan yourself. Take each from its parameter
+  or ask for it.
 - After the brief, own every creative decision. Never ask the user for scenes, keyframes,
   transitions, layer structures, camera placement, animation timing, or visual metaphors.
 - Do not fabricate technical behavior, scientific mechanisms, historical facts, or product
@@ -61,7 +68,7 @@ purely abstract piece.
 
 Apply these unless the user or the creative brief says otherwise:
 
-- 16:9 at 1920 × 1080 or higher.
+- A short side of at least 1080 pixels, such as 1920 × 1080 for 16:9.
 - On-screen text in the language of the user's request.
 - Geist and Geist Mono with the default palette in [Design system](workflows/design-system.md).
 - A locked, front-facing, orthographic camera.

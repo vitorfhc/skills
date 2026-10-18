@@ -93,12 +93,27 @@ to what came before. Whenever possible:
 Avoid resetting the entire composition unnecessarily. Scene transitions should feel like a
 natural consequence of the preceding action.
 
-## Fit the Duration and Choose the Ending
+## Fit the Duration
 
 Treat the duration in the brief as fixed. It is the user's choice. Fit the narrative to it rather
 than changing the length: consolidate or cut beats when it is short, and deepen the explanation or
 add beats when it is long, without stretching existing ones. If the message cannot be communicated
 clearly in that time, tell the user and propose a length before animating.
+
+## Plan for the Voiceover
+
+When `voiceover` is `yes`, narration will be recorded over the finished picture, so the picture must
+leave room for it:
+
+- Write a narration line for every beat, at about 2.5 words per second of beat time.
+- Hold key frames while the narration explains them, and leave short pauses between lines.
+- Keep on-screen text to labels and key terms that reinforce the narration. Never duplicate it.
+- Leave a brief silent lead-in before the first line and a tail after the last.
+
+When `voiceover` is `no`, the visuals and on-screen text must carry the whole message silently.
+Give every essential concept a visual representation or an on-screen label.
+
+## Choose the Ending
 
 Consider a seamless loop when it improves the video. A successful loop connects the final
 composition to the opening through a natural visual transformation. Do not force looping when a
@@ -109,7 +124,8 @@ definitive ending would communicate the message more effectively.
 An internal storyboard containing:
 
 - Ordered beats. For each: what the viewer should understand, the objects on screen, how the beat
-  derives from the previous one, and its approximate timing.
+  derives from the previous one, its approximate timing, and its narration line when a voiceover
+  is planned.
 - The motifs and how each evolves.
 - Beat timings that add up to the duration in the brief.
 - The loop or ending decision.
