@@ -80,6 +80,8 @@ content does not fit the duration, cut ideas. Never speed up the motion to make 
 Apply these unless the user or the creative brief says otherwise:
 
 - A short side of at least 1080 pixels, such as 1920 × 1080 for 16:9.
+- 30 frames per second, exported as an H.264 MP4 with the settings in
+  [Animate](workflows/animate.md).
 - On-screen text in the language of the user's request.
 - Geist and Geist Mono with the default palette in [Design system](workflows/design-system.md).
 - A locked, front-facing, orthographic camera.

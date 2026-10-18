@@ -54,8 +54,9 @@ Ask with `AskUserQuestion`:
   choosing it changes in the video. The user can always pick "Other", so never add one.
 - Put the option you recommend first and append `(Recommended)` to its label.
 - For duration, offer lengths that suit the subject and describe what each length can cover.
-- For aspect ratio, offer ratios that suit likely destinations, such as `16:9` for websites and
-  talks, `9:16` for vertical short-form video, `1:1` or `4:5` for social feeds.
+- For aspect ratio, offer ratios that suit likely destinations, such as `9:16` for Reels and other
+  vertical short-form video, `16:9` for websites and talks, `1:1` or `4:5` for social feeds.
+  Recommend `9:16` unless the request points to a website, talk, or presentation.
 - For voiceover, ask whether narration will be recorded over the video later, and describe how
   each answer changes text density and pacing.
 - The user can enter any other value under "Other".
@@ -83,8 +84,8 @@ Example first call for "Make a motion-design video about how DNS resolution work
       "header": "Aspect",
       "multiSelect": false,
       "options": [
-        {"label": "16:9 (Recommended)", "description": "Wide frame for websites, talks, and YouTube."},
-        {"label": "9:16", "description": "Vertical frame for Reels, Shorts, and TikTok."},
+        {"label": "9:16 (Recommended)", "description": "Vertical frame for Reels, Shorts, and TikTok."},
+        {"label": "16:9", "description": "Wide frame for websites, talks, and YouTube."},
         {"label": "1:1", "description": "Square frame for social feeds."},
         {"label": "4:5", "description": "Portrait frame for Instagram and LinkedIn feeds."}
       ]

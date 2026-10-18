@@ -17,6 +17,10 @@ Check:
 - Are colors consistent with their semantic roles?
 - Does the runtime match the duration in the brief?
 - Does the frame match the aspect ratio and resolution in the brief?
+- Does the file match the export settings in [Animate](animate.md)? Check the frame rate, codec,
+  and pixel format with `ffprobe`.
+- Does the text render in the planned typefaces rather than a fallback font?
+- On 9:16, is everything essential inside the safe area in [Design system](design-system.md)?
 - Does every timing meet the pacing minimums in [Animate](animate.md)? Audit the beat timeline,
   and slow down or cut anything that rushes.
 - With a planned voiceover, does each beat leave time for its narration line, and does every
@@ -61,5 +65,5 @@ If the environment cannot render or export a video, do not claim the video was p
 provide the most useful supported production deliverable, such as an executable animation project
 or a detailed production specification, and clearly identify what remains unrendered.
 
-In the final response, state the output path, duration, aspect ratio, resolution, voiceover plan,
-voiceover script path when there is one, and any assumptions recorded in the brief.
+In the final response, state the output path, duration, aspect ratio, resolution, frame rate,
+voiceover plan, voiceover script path when there is one, and any assumptions recorded in the brief.

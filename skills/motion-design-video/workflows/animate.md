@@ -90,8 +90,15 @@ For positioning, prefer critically damped spring behavior:
 
 `f(t) = 1 - (1 + ωt)e^(-ωt)`
 
-Choose `ω` based on the intended motion speed. This approaches the destination smoothly without
-overshooting.
+This approaches the destination smoothly without overshooting. The spring is 99% settled at
+`ωt ≈ 6.6`, so derive `ω` from the motion's duration in seconds: `ω = 6.6 / duration`.
+
+| Duration | ω |
+|----------|---|
+| 0.6 s | 11 |
+| 0.8 s | 8.3 |
+| 1.0 s | 6.6 |
+| 1.5 s | 4.4 |
 
 | Motion | Interpolation |
 |--------|---------------|
@@ -162,6 +169,22 @@ strong typographic moments selectively.
 
 Choose an animation toolchain that the environment can actually execute and render. Render at the
 resolution and aspect ratio from the design system.
+
+Install Geist and Geist Mono before rendering, such as from Google Fonts or the `geist` npm
+package. Render a test frame and confirm that the text uses them rather than a fallback font.
+
+Export with settings that every major platform accepts:
+
+| Setting | Value |
+|---------|-------|
+| Frame rate | 30 fps, constant |
+| Codec | H.264, High profile |
+| Pixel format | `yuv420p` |
+| Quality | CRF 18 or lower |
+| Container | `.mp4` with `faststart` |
+| Audio | AAC when the brief includes a music track, otherwise none |
+
+With ffmpeg: `-r 30 -c:v libx264 -profile:v high -pix_fmt yuv420p -crf 18 -movflags +faststart`.
 
 ## Output
 

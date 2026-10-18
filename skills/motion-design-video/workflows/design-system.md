@@ -26,7 +26,8 @@ Preferred typefaces:
 - **Geist** for titles, headings, and general text.
 - **Geist Mono** for numbers, code, measurements, and technical annotations.
 
-When these fonts are unavailable, use visually comparable alternatives.
+Install them before rendering, as described in [Animate](animate.md). When they cannot be
+installed, use visually comparable alternatives and record the substitution as an assumption.
 
 | Element | Weight | Treatment |
 |---------|--------|-----------|
@@ -76,8 +77,25 @@ Maintain safe areas around important content. Avoid placing essential labels nea
 boundaries. The composition should remain readable at smaller playback sizes.
 
 Compose for the chosen aspect ratio from the start rather than cropping a wide layout. Vertical
-frames favor stacked arrangements and larger type. On vertical social formats, keep essential
-content clear of the platform interface overlays near the bottom and edges.
+frames favor stacked arrangements and larger type.
+
+### Vertical Safe Area
+
+On 9:16, platform interface overlays cover the top, bottom, and sides of the frame. Keep every
+title, label, and object the viewer must read or follow inside Meta's Reels safe area:
+
+| Margin | Share of frame | At 1080 × 1920 |
+|--------|----------------|----------------|
+| Top | 14% | 269 px |
+| Bottom | 35% | 672 px |
+| Left and right | 6% each | 65 px |
+
+This leaves a 950 × 979 px safe area at 1080 × 1920. Backgrounds, structural lines, and motifs may
+extend into the margins.
+
+The Instagram profile grid shows 9:16 videos cropped to the central 3:4 band, 1080 × 1440 at
+1080 × 1920. The safe area falls inside that band, so keep the opening frame's title inside the
+safe area for the grid thumbnail to stay legible.
 
 ## Visual Restraint
 
