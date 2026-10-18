@@ -64,6 +64,26 @@ system.
 
 Motion should feel precise, controlled, and intentional.
 
+### Pacing
+
+Generated animations consistently run too fast. Set every timing on the slow side, then check it.
+
+| Element | Minimum |
+|---------|---------|
+| Motion the viewer must follow | 0.6 seconds, and 0.8 to 1.5 seconds for major transformations |
+| Hold after each settled change | 1 second before the next change starts |
+| On-screen text, settled and legible | 1.5 seconds, or 0.4 seconds per word, whichever is longer |
+| Each new idea | About 4 seconds on screen before the next one appears |
+| Final frame | 2 seconds, unless the video loops |
+
+- Introduce one new idea at a time, and run only one primary motion at once.
+- A settled frame that the viewer is reading or absorbing is not idle time.
+- When the content does not fit the duration, cut ideas. Never compress these timings.
+- With a planned voiceover, the narration sets the pace, and these minimums still apply.
+
+Before rendering, write out the timeline as a table of beats with their motion and hold times, and
+fix anything below these minimums.
+
 ### Easing
 
 For positioning, prefer critically damped spring behavior:
@@ -104,7 +124,7 @@ Maintain visual activity without overwhelming the audience. Avoid:
 - Movement that exists only to fill time.
 
 Allow complex ideas enough time to become understandable. Use faster transitions when the
-relationship is already established.
+relationship is already established, but never go below the minimums in Pacing.
 
 ## Camera and Space
 

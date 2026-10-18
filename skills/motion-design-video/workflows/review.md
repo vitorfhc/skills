@@ -17,8 +17,11 @@ Check:
 - Are colors consistent with their semantic roles?
 - Does the runtime match the duration in the brief?
 - Does the frame match the aspect ratio and resolution in the brief?
-- With a planned voiceover, does each beat leave time for its narration line? Without one, does
-  the video communicate its message silently?
+- Does every timing meet the pacing minimums in [Animate](animate.md)? Audit the beat timeline,
+  and slow down or cut anything that rushes.
+- With a planned voiceover, does each beat leave time for its narration line, and does every
+  timestamp in the voiceover script match the final render? Without one, does the video
+  communicate its message silently?
 - Are complex ideas adequately explained?
 - Does the animation feel original?
 - Are there factual inaccuracies?
@@ -50,7 +53,7 @@ Unless the user or the brief specifies otherwise, deliver a complete, polished v
 
 - The aspect ratio from the brief, with a short side of at least 1080 pixels when supported.
 - The duration from the brief.
-- With a planned voiceover, a timed narration script alongside the video.
+- With a planned voiceover, the final [Voiceover script](voiceover-script.md) next to the video.
 - On-screen text in the language of the user's request.
 - The established visual identity.
 
@@ -59,4 +62,4 @@ provide the most useful supported production deliverable, such as an executable 
 or a detailed production specification, and clearly identify what remains unrendered.
 
 In the final response, state the output path, duration, aspect ratio, resolution, voiceover plan,
-and any assumptions recorded in the brief.
+voiceover script path when there is one, and any assumptions recorded in the brief.

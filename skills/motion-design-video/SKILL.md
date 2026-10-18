@@ -24,7 +24,7 @@ animation, excellent typography, and coherent visual storytelling.
 |-----------|--------|---------|
 | `duration` | Seconds or minutes, such as `15s`, `45s`, `2m`, or `1m30s` | `duration=45s` |
 | `aspect` | Width to height, such as `16:9`, `9:16`, `1:1`, or `4:5` | `aspect=9:16` |
-| `voiceover` | `yes` when narration will be recorded over the video later, otherwise `no` | `voiceover=yes` |
+| `voiceover` | `yes` when narration will be recorded over the video later, otherwise `no`. `yes` adds a voiceover script to the deliverables. | `voiceover=yes` |
 
 ```text
 /motion-design-video duration=45s aspect=9:16 voiceover=yes how DNS resolution works
@@ -50,6 +50,17 @@ ends with an output that the next one builds on.
 
 Never skip Clarify. Skip Research only when the subject needs no factual grounding, such as a
 purely abstract piece.
+
+When `voiceover` is `yes`, also follow [Voiceover script](workflows/voiceover-script.md): draft
+it in step 3 and finalize it in step 6.
+
+## Pacing
+
+> **Warning:** Generated videos consistently run too fast. Viewers need time to read each label,
+> follow each movement, and absorb each result before the next change. Err on the side of slow.
+
+Follow the minimum timings in the Pacing section of [Animate](workflows/animate.md). When the
+content does not fit the duration, cut ideas. Never speed up the motion to make it fit.
 
 ## Non-negotiables
 

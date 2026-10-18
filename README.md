@@ -92,7 +92,9 @@ Set any of these parameters up front to skip its question:
 
 In agents without slash commands, include the same `name=value` pairs or plain language, such as
 "a 45-second vertical video we will narrate later", in the request. With `voiceover=yes`, the video
-leaves room for narration, keeps on-screen text sparse, and ships with a timed narration script.
+leaves room for narration, keeps on-screen text sparse, and ships with a voiceover script next to
+the video: timestamped cues with what is on screen, the exact words to say, delivery direction,
+sync points, and a pronunciation guide.
 
 ## Development
 

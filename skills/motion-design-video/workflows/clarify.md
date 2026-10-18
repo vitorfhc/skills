@@ -95,7 +95,7 @@ Example first call for "Make a motion-design video about how DNS resolution work
       "multiSelect": false,
       "options": [
         {"label": "No voiceover (Recommended)", "description": "Visuals and on-screen text carry the whole message."},
-        {"label": "Voiceover later", "description": "Leaves room for narration, keeps text sparse, and includes a timed script."}
+        {"label": "Voiceover later", "description": "Leaves room for narration, keeps text sparse, and includes a full voiceover script."}
       ]
     },
     {

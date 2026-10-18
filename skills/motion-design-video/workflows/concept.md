@@ -100,13 +100,18 @@ than changing the length: consolidate or cut beats when it is short, and deepen 
 add beats when it is long, without stretching existing ones. If the message cannot be communicated
 clearly in that time, tell the user and propose a length before animating.
 
+Budget beats against the pacing minimums in [Animate](animate.md): about 4 seconds per new idea.
+A 30-second video fits about six new ideas, not fifteen. Generated videos consistently run too
+fast, so when in doubt, plan fewer beats.
+
 ## Plan for the Voiceover
 
 When `voiceover` is `yes`, narration will be recorded over the finished picture, so the picture must
-leave room for it:
+leave room for it. Draft the [Voiceover script](voiceover-script.md) now, and let the narration
+set the beat timing:
 
-- Write a narration line for every beat, at about 2.5 words per second of beat time.
-- Hold key frames while the narration explains them, and leave short pauses between lines.
+- Write a narration line for every beat, at no more than about 2.2 words per second of beat time.
+- Hold key frames while the narration explains them, and leave pauses between lines.
 - Keep on-screen text to labels and key terms that reinforce the narration. Never duplicate it.
 - Leave a brief silent lead-in before the first line and a tail after the last.
 
