@@ -1,0 +1,4 @@
+interface:
+  display_name: "Motion Design Video"
+  short_description: "Research, design, and animate premium motion-design videos"
+  default_prompt: "Use $motion-design-video to create a motion-design video."

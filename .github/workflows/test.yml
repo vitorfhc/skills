@@ -31,7 +31,10 @@ jobs:
           node-version: "22"
 
       - name: Verify npx skills discovery
-        run: npx --yes skills add . --list | grep discord-webhooks
+        run: |
+          skills="$(npx --yes skills add . --list)"
+          grep discord-webhooks <<<"$skills"
+          grep motion-design-video <<<"$skills"
 
       - name: Verify isolated Codex installation
         run: |

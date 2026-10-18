@@ -49,6 +49,44 @@ alerts: "https://discord.com/api/webhooks/..."
 
 Webhook URLs contain secret tokens. Do not commit, print, or share the config.
 
+## Motion Design Video
+
+`motion-design-video` turns a subject into a premium motion-design video: researched, storyboarded,
+and animated with precise typography, geometric transformations, continuous transitions, and a
+consistent design system. It suits explainers, product showcases, brand introductions, promotional
+content, and technical visualizations.
+
+The skill first asks clarifying questions about the request with Claude Code's `AskUserQuestion`
+tool, or in a plain message for agents without it. The length is always the user's choice, so it
+asks for one unless you set the `duration` parameter. After that it makes every creative decision
+itself, working through six workflows in `workflows/`: clarify, research, concept and structure,
+design system, animate, and review. It defaults to 16:9 at 1920 × 1080, Geist typography, and a
+dark palette. It bundles no renderer. The agent animates with the tools available in its
+environment and reports anything it could not render.
+
+Install it with:
+
+```bash
+npx --yes skills add vitorfhc/skills --skill motion-design-video
+```
+
+Example requests after installation:
+
+```text
+Make a motion-design video explaining how DNS resolution works
+Create a 15-second product intro for our CLI tool
+Animate the idea of compound interest as an abstract loop
+```
+
+Set the length up front with the `duration` parameter, in seconds or minutes such as `45s`, `2m`,
+or `1m30s`:
+
+```text
+/motion-design-video duration=45s how DNS resolution works
+```
+
+In agents without slash commands, include `duration=45s` or a plain-language length in the request.
+
 ## Development
 
 Run the deterministic test suite with:
@@ -62,7 +100,7 @@ not contact Discord or send live messages.
 
 ## Sources
 
-The skill incorporates the
+The Discord Webhooks skill incorporates the
 [Discord Webhooks Guide](https://birdie0.github.io/discord-webhooks-guide/discord_webhook.html) and
 cross-checks it against the current
 [official Discord webhook documentation](https://docs.discord.com/developers/resources/webhook#execute-webhook).
