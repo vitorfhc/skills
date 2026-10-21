@@ -1,0 +1,4 @@
+interface:
+  display_name: "Guided Goal"
+  short_description: "Interview to define a goal, then start goal mode"
+  default_prompt: "Use $guided-goal to set up a goal for goal mode."
