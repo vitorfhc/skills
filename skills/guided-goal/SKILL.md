@@ -28,7 +28,7 @@ The objective is ready only when all five are pinned down. Probe the missing or 
 
 1. **Success criteria**: binary and checkable without judgment, such as tests pass, a command exits 0, a score ≥ N, or a file exists with property X. Reject subjective criteria ("works well", "clean", "done") and ask what observable signal would show it.
 2. **Verification**: the exact commands or actions the agent runs to check its own work.
-3. **Attempt cap**: an explicit maximum, such as "stop after 15 turns" or "after 5 failed attempts at the fix". Include a token budget if the user cares about cost.
+3. **Attempt cap**: an explicit maximum, such as "stop after 15 turns" or "after 5 failed attempts at the fix". In Codex, also ask for a token budget: it is the only limit Codex enforces, and a turn cap written into the goal is only advice, so without a budget the loop runs until the agent marks the goal complete or blocked, or the user stops it. Elsewhere, include a token budget if the user cares about cost.
 4. **Boundaries**: the files, directories and operations in scope, plus an explicit list of what must not be touched.
 5. **Stop conditions**: when to halt and hand back to the human, such as ambiguity, a risky or irreversible operation, or the cap being reached.
 
@@ -58,7 +58,12 @@ How you start it depends on the host.
 
 ### Codex: you have a `create_goal` tool
 
-Call `create_goal` with `objective` set to the final markdown. Pass `token_budget` only if the user gave one. Creating the goal turns goal mode on immediately: confirm in one short sentence, then start working toward the objective.
+Codex keeps giving the agent new turns until the agent marks the goal complete or blocked, and it allows `blocked` only after the same blocker has come up on three consecutive turns. The token budget is the only limit Codex enforces itself. Adapt the objective to that:
+
+- Add a final Stop conditions bullet such as "When a stop condition fires, do no further work on this goal; report it each turn and mark the goal blocked as soon as Codex allows." Without it, each new turn goes looking for other work to do.
+- Pass the user's token budget as `token_budget`. If they declined to set one, say in one line that the turn cap is only advice in Codex and nothing else bounds the run.
+
+Call `create_goal` with `objective` set to the final markdown. Creating the goal turns goal mode on immediately: confirm in one short sentence, then start working toward the objective.
 
 If the call fails because an unfinished goal already exists, tell the user and suggest `/goal clear` (or finishing the current goal) before retrying. Don't remove their existing goal yourself.
 
@@ -105,4 +110,4 @@ Make the auth test suite pass reliably on the session-refactor branch.
 - The goal also ends if Claude stops and reports that one of these fired.
 ```
 
-In Codex, the same text without the `/goal ` prefix (and without the Claude-specific last bullet) goes into `create_goal`.
+In Codex, the same text without the `/goal ` prefix goes into `create_goal`, with the Codex stop bullet in place of the last one and the user's budget as `token_budget`.

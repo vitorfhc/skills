@@ -131,14 +131,18 @@ It interviews you one question at a time, six questions or fewer, until five thi
 1. **Success criteria** that can be checked without judgment, such as tests passing or a command
    exiting 0.
 2. **Verification:** the exact commands the agent runs to check its own work.
-3. **Attempt cap:** a maximum number of turns or tries, plus a token budget if you want one.
+3. **Attempt cap:** a maximum number of turns or tries. In Codex it also asks for a token budget,
+   the only limit Codex enforces; elsewhere the budget is optional.
 4. **Boundaries:** what is in scope and what must not be touched.
 5. **Stop conditions:** when the agent halts and hands control back to you.
 
 It then writes the goal under fixed headings (Objective, Success criteria, Verification, Boundaries,
 Stop conditions) and starts it:
 
-- **Codex:** it calls Codex's `create_goal` tool and starts working.
+- **Codex:** it calls Codex's `create_goal` tool with the token budget and starts working. Codex
+  ends a goal only when the agent marks it complete, or blocked after the same blocker recurs on
+  three turns, so the goal tells the agent to stop working and mark it blocked when a stop condition
+  fires.
 - **Claude Code:** the model cannot set a goal itself, so it hands you a ready `/goal` command and
   copies it to the clipboard when a shell is available. Claude Code's goal checker reads only the
   conversation, so the goal requires the agent to show its verification output and makes the stop
