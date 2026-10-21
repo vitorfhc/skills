@@ -121,6 +121,47 @@ leaves room for narration, keeps on-screen text sparse, and ships with a voiceov
 the video: timestamped cues with what is on screen, the exact words to say, delivery direction,
 sync points, and a pronunciation guide.
 
+## Guided Goal
+
+`guided-goal` turns a rough objective into a well-defined goal for goal mode, the persistent
+autonomous loop behind `/goal` in Claude Code and Codex. It is a port of Oh My Pi's `/guided-goal`.
+
+It interviews you one question at a time, six questions or fewer, until five things are settled:
+
+1. **Success criteria** that can be checked without judgment, such as tests passing or a command
+   exiting 0.
+2. **Verification:** the exact commands the agent runs to check its own work.
+3. **Attempt cap:** a maximum number of turns or tries. In Codex it also asks for a token budget,
+   the only limit Codex enforces; elsewhere the budget is optional.
+4. **Boundaries:** what is in scope and what must not be touched.
+5. **Stop conditions:** when the agent halts and hands control back to you.
+
+It then writes the goal under fixed headings (Objective, Success criteria, Verification, Boundaries,
+Stop conditions) and starts it:
+
+- **Codex:** it calls Codex's `create_goal` tool with the token budget and starts working. Codex
+  ends a goal only when the agent marks it complete, or blocked after the same blocker recurs on
+  three turns, so the goal tells the agent to stop working and mark it blocked when a stop condition
+  fires.
+- **Claude Code:** the model cannot set a goal itself, so it hands you a ready `/goal` command and
+  copies it to the clipboard when a shell is available. Claude Code's goal checker reads only the
+  conversation, so the goal requires the agent to show its verification output and makes the stop
+  conditions end the goal.
+
+Install it with:
+
+```bash
+npx --yes skills add vitorfhc/skills --skill guided-goal
+```
+
+Example requests after installation:
+
+```text
+/guided-goal make the flaky auth tests pass
+$guided-goal migrate the billing module to the new API client
+Help me write a /goal for splitting utils.ts into smaller modules
+```
+
 ## Development
 
 Run the deterministic test suite with:
@@ -142,6 +183,11 @@ cross-checks it against the current
 The Motion Design Video style cards are distilled from the community showcase at
 [skillry.dev/ai-videos](https://skillry.dev/ai-videos/opus-5-5), adapted from interactive and
 real-time pieces where needed so they render as video.
+
+The Guided Goal interview is adapted from the `/guided-goal` prompt in
+[Oh My Pi](https://github.com/can1357/oh-my-pi) (MIT), and its hand-off follows the documented
+behavior of [Claude Code's `/goal`](https://code.claude.com/docs/en/goal) and Codex's
+[`create_goal` tool](https://github.com/openai/codex/blob/main/codex-rs/ext/goal/src/spec.rs).
 
 ## License
 

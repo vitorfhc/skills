@@ -35,6 +35,7 @@ jobs:
           skills="$(npx --yes skills add . --list)"
           grep discord-webhooks <<<"$skills"
           grep motion-design-video <<<"$skills"
+          grep guided-goal <<<"$skills"
 
       - name: Verify isolated Codex installation
         run: |
